@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+@layer base {
+  button {
+    @apply bg-white rounded-2xl p-2 px-8 flex justify-center transition ease-in-out hover:brightness-75
+  }
+}
