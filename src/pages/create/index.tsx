@@ -30,7 +30,7 @@ export default function Create() {
     let prompt = promptInputAreaRef.current!.value;
     setPromptState(prompt);
     console.log("Sending to API!");
-    let result: Response;
+    let result: Response | undefined = undefined;
     let tries = 0;
     let modelIndex = 0;
     while (tries < 15) {
@@ -47,7 +47,7 @@ export default function Create() {
         }
       }
     }
-    const url = URL.createObjectURL(await result.blob());
+    const url = URL.createObjectURL(await result!.blob());
     setImageURL(url);
   }
 
