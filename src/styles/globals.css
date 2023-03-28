@@ -14,4 +14,7 @@
   button {
     @apply bg-white rounded-2xl p-2 px-8 flex justify-center transition ease-in-out hover:brightness-75
   }
+  textarea {
+    @apply resize-none rounded-2xl p-4 outline-none bg-neutral-800 text-white
+  }
 }

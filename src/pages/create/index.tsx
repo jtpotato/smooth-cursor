@@ -28,6 +28,7 @@ export default function Create() {
 
   async function onGenerate() {
     let prompt = promptInputAreaRef.current!.value;
+    setPromptState(prompt);
     console.log("Sending to API!");
     let result: Response;
     let tries = 0;
@@ -69,7 +70,7 @@ export default function Create() {
           <div className="flex flex-col h-48 w-1/4 space-y-2">
             <textarea
               placeholder="Insert prompt here..."
-              className="resize-none rounded-2xl h-full p-2 outline-none"
+              className="h-full"
               ref={promptInputAreaRef}
             ></textarea>
             <button
