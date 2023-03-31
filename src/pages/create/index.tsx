@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 
 export default function Create() {
   const models = [
-    "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+    // "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
     "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
     "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2",
     "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
