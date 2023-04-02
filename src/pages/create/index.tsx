@@ -2,27 +2,22 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
 export default function Create() {
-  const models = [
-    // "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
-    "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
-    "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2",
-    "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
-  ];
-
-  async function query(prompt: string, modelIndex: number) {
-    console.log(models[modelIndex], modelIndex)
-    const response = await fetch(models[modelIndex], {
-      headers: {
-        Authorization: "Bearer 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",
-        /* I KNOW IT'S BAD TO EXPOSE API KEYS BUT WHAT IS SOMEONE GOING TO DO WITH THIS ONE?? USE IT UNTIL I GET RATELIMITED? */
-      },
-      method: "POST",
-      body: JSON.stringify({
-        inputs: prompt,
-        options: { use_cache: false, wait_for_model: false },
-      }),
-    });
-    const result = response;
+  async function query(prompt: string) {
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
+      {
+        headers: { Authorization: "Bearer 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" },
+        method: "POST",
+        body: JSON.stringify({
+          inputs: prompt,
+          options: {
+            use_cache: false,
+            wait_for_model: false
+          }
+        }),
+      }
+    );
+    const result = await response;
     return result;
   }
 
@@ -31,30 +26,22 @@ export default function Create() {
     setPromptState(prompt);
     console.log("Sending to API!");
     let result: Response | undefined = undefined;
-    let tries = 0;
-    let modelIndex = 0;
-    while (tries < 15) {
-      if (prompt) {
-        result = await query(prompt, modelIndex);
-        if (result.status == 503) {
-          console.log(
-            "Woops, the model is loading. Let's try a different one."
-          );
-          modelIndex = (modelIndex + 1) % models.length;
-          tries += 1;
-        } else {
-          break;
-        }
+    if (prompt) {
+      result = await query(prompt);
+      if (result.status == 503) {
+        console.log("Woops, the model is loading. Let's try again.");
+        setTimeout(onGenerate, 1000)
+      } else {
+        const url = URL.createObjectURL(await result!.blob());
+        setImageURL(url);
       }
     }
-    const url = URL.createObjectURL(await result!.blob());
-    setImageURL(url);
   }
 
   async function onShare() {
     router.push({
-        pathname: "/share",
-        query: { imageURL: imageURL, prompt: promptState },
+      pathname: "/share",
+      query: { imageURL: imageURL, prompt: promptState },
     });
   }
 
