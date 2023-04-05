@@ -1,4 +1,6 @@
-import { useRouter } from "next/router";
+'use client'
+
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function Create() {
@@ -12,7 +14,7 @@ export default function Create() {
           inputs: prompt,
           options: {
             use_cache: false,
-            wait_for_model: false
+            wait_for_model: true
           }
         }),
       }
