@@ -1,21 +1,40 @@
-'use client'
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function Create() {
+  async function loadModel() {
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
+      {
+        headers: {
+          Authorization: "Bearer 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",
+          "X-Wait-For-Model": "true",
+          "X-Use-Cache": "false",
+          "X-Load-Model": "0",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          inputs: "test",
+        }),
+      }
+    );
+    const result = await response;
+    return result;
+  }
   async function query(prompt: string) {
     const response = await fetch(
       "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1",
       {
-        headers: { Authorization: "Bearer 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" },
+        headers: {
+          Authorization: "Bearer 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",
+          "X-Wait-For-Model": "true",
+          "X-Use-Cache": "false",
+        },
         method: "POST",
         body: JSON.stringify({
           inputs: prompt,
-          options: {
-            use_cache: false,
-            wait_for_model: true
-          }
         }),
       }
     );
@@ -24,15 +43,16 @@ export default function Create() {
   }
 
   async function onGenerate() {
+    loadModel(); // try to load the model
     let prompt = promptInputAreaRef.current!.value;
     setPromptState(prompt);
     console.log("Sending to API!");
     let result: Response | undefined = undefined;
     if (prompt) {
       result = await query(prompt);
-      if (result.status == 503) {
-        console.log("Woops, the model is loading. Let's try again.");
-        setTimeout(onGenerate, 1000)
+      if (result.status == 500) {
+        console.log("Woops, the model is struggling. Let's try again.");
+        setTimeout(onGenerate, 1000);
       } else {
         const url = URL.createObjectURL(await result!.blob());
         setImageURL(url);
@@ -41,10 +61,7 @@ export default function Create() {
   }
 
   async function onShare() {
-    router.push({
-      pathname: "/share",
-      query: { imageURL: imageURL, prompt: promptState },
-    });
+    router.push("/share");
   }
 
   const promptInputAreaRef = useRef<HTMLTextAreaElement>(null);
