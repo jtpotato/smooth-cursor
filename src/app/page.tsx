@@ -22,6 +22,10 @@ function Home() {
     let offsetTop = caretTargetRef.current!.offsetTop;
     let offsetLeft = caretTargetRef.current!.offsetLeft;
 
+    if (currentCommand.endsWith(" ")) {
+      offsetLeft += 10;
+    }
+
     setCaretYOffset(offsetTop);
     setCaretXOffset(offsetLeft);
   }, [currentCommand]);
@@ -42,13 +46,13 @@ function Home() {
         <div
           ref={commandInputBoxRef}
           style={{
-            backgroundColor: "#1f2937",
             bottom: 0,
             position: "absolute",
             width: "100vw",
             display: "flex",
             alignItems: "center",
             padding: "0.5rem",
+            height: "100vh"
           }}
         >
           <p
@@ -59,7 +63,6 @@ function Home() {
               paddingRight: 0,
               width: "100%",
               overflowWrap: "break-word",
-              minHeight: "2.5em"
             }}
             ref={commandInputTextRef}
           >
