@@ -1,15 +1,15 @@
 @keyframes caret-blink {
     50% {
-        opacity: 0;
+        opacity: 0.5;
     }
 }
 
 .caret {
     display: inline-block;
     position: absolute;
-    animation: caret-blink 1.8s infinite ease;
+    animation: caret-blink 1s infinite ease;
     background-color: white;
     width: 0.6em;
     height: 1.4em;
-    transition: 500ms;
+    transition: 50ms;
 }
